@@ -1,13 +1,13 @@
 package com.valimade.geofinder.di
 
-import com.valimade.geofinder.di.flp.FLPLocationModule
-import com.valimade.geofinder.di.locationmanager.LocationManagerModule
+import com.valimade.geofinder.di.flp.FLPLocationComponent
+import com.valimade.geofinder.di.locationmanager.LocationManagerComponent
 import dagger.Module
 
 @Module(
-    includes = [
-        FLPLocationModule::class,
-        LocationManagerModule::class,
+    subcomponents = [
+        LocationManagerComponent::class,
+        FLPLocationComponent::class
     ]
 )
 class AppModule {
