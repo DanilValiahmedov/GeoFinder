@@ -41,6 +41,11 @@ android {
 
 dependencies {
 
+    implementation(libs.play.services.location)
+
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
