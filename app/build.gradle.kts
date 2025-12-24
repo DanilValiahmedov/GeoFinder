@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -37,14 +38,20 @@ android {
     buildFeatures {
         compose = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
 
-    implementation(libs.play.services.location)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
+    implementation(libs.rxJava)
+    implementation(libs.rxAndroid)
+
+    implementation(libs.play.services.location)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -7,8 +7,9 @@ import com.google.android.gms.location.Priority
 import com.valimade.geofinder.domain.exception.LocationUnavailableException
 import com.valimade.geofinder.domain.model.GeoLocation
 import io.reactivex.Single
+import javax.inject.Inject
 
-class FLPRepository(
+class FLPRepository @Inject constructor(
     private val fusedClient: FusedLocationProviderClient
 ) : IFLPRepository {
 

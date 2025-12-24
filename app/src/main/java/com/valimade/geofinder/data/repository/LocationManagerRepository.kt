@@ -10,8 +10,9 @@ import com.valimade.geofinder.domain.exception.LocationUnavailableException
 import com.valimade.geofinder.domain.model.GeoLocation
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class LocationManagerRepository(
+class LocationManagerRepository @Inject constructor(
     private val locationManager: LocationManager
 ) : ILocationManagerRepository {
 
