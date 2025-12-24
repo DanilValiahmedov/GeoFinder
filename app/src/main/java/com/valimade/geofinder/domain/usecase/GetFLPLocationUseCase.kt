@@ -7,7 +7,6 @@ import io.reactivex.Single
 class GetFLPLocationUseCase(
     private val fLPRepository: IFLPRepository
 ): IGetFLPLocationUseCase {
-
     override fun getLocation(): Single<GeoLocation> {
         return fLPRepository.getFLPLocation()
     }
