@@ -15,7 +15,7 @@ class GetAccurateLocationUseCase @Inject constructor(
             locationManagerRepository.getAccurateLocation()
         } else {
             Single.error(
-                PermissionNotGrantedException("Нет разрешения на получение геолокации")
+                PermissionNotGrantedException()
             )
         }
     }

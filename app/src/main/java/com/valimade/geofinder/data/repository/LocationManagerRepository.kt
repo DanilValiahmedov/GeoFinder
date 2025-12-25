@@ -8,6 +8,8 @@ import android.location.LocationListener
 import android.os.Bundle
 import com.valimade.geofinder.domain.exception.LocationUnavailableException
 import com.valimade.geofinder.domain.model.GeoLocation
+import com.valimade.geofinder.domain.model.LocationResult
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -16,30 +18,37 @@ class LocationManagerRepository @Inject constructor(
     private val locationManager: LocationManager
 ) : ILocationManagerRepository {
 
+
     override fun getAccurateLocation(): Single<GeoLocation> {
         return Single.zip(
-            getProviderLocation(LocationManager.GPS_PROVIDER)
-                .timeout(5, TimeUnit.SECONDS)
-                .onErrorReturnItem(null),
+            getProviderLocation(LocationManager.GPS_PROVIDER),
             getProviderLocation(LocationManager.NETWORK_PROVIDER)
-                .timeout(5, TimeUnit.SECONDS)
-                .onErrorReturnItem(null)
-        ) { gps: GeoLocation?, network: GeoLocation? ->
+        ) { gps, network ->
 
             when {
-                gps == null && network == null -> throw LocationUnavailableException("Не удалось определить геолокацию")
-                gps == null -> network
-                network == null -> gps
-                gps.accuracy <= network.accuracy -> gps
-                else -> network
-            }!!
+                gps is LocationResult.Empty && network is LocationResult.Empty ->
+                    throw LocationUnavailableException("Не удалось определить геолокацию")
+
+                gps is LocationResult.Value && network is LocationResult.Empty ->
+                    gps.location
+
+                gps is LocationResult.Empty && network is LocationResult.Value ->
+                    network.location
+
+                gps is LocationResult.Value && network is LocationResult.Value ->
+                    if (gps.location.accuracy <= network.location.accuracy)
+                        gps.location
+                    else
+                        network.location
+
+                else -> throw LocationUnavailableException("Не удалось определить геолокацию")
+            }
         }
     }
 
     @SuppressLint("MissingPermission")
-    private fun getProviderLocation(provider: String): Single<GeoLocation?> {
-        return Single.create { emitter ->
-
+    private fun getProviderLocation(provider: String): Single<LocationResult> {
+        return Maybe.create<GeoLocation> { emitter ->
             val listener = object : LocationListener {
                 override fun onLocationChanged(location: Location) {
                     if (!emitter.isDisposed) {
@@ -47,12 +56,12 @@ class LocationManagerRepository @Inject constructor(
                             GeoLocation(
                                 latitude = location.latitude,
                                 longitude = location.longitude,
-                                accuracy = location.accuracy
+                                accuracy = location.accuracy,
+                                method = provider,
                             )
                         )
                     }
                 }
-
                 override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
                 override fun onProviderEnabled(provider: String) {}
                 override fun onProviderDisabled(provider: String) {}
@@ -64,6 +73,10 @@ class LocationManagerRepository @Inject constructor(
                 Looper.getMainLooper()
             )
         }
+            .timeout(5, TimeUnit.SECONDS)
+            .map<LocationResult> { LocationResult.Value(it) }
+            .switchIfEmpty(Single.just(LocationResult.Empty))
+            .onErrorReturnItem(LocationResult.Empty)
     }
 
 }

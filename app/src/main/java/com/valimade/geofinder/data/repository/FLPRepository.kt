@@ -29,6 +29,7 @@ class FLPRepository @Inject constructor(
                                 latitude = location.latitude,
                                 longitude = location.longitude,
                                 accuracy = location.accuracy,
+                                method = "Fused Location Provider",
                             )
                         )
                     } else {

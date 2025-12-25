@@ -15,7 +15,7 @@ class GetFLPLocationUseCase @Inject constructor(
             fLPRepository.getFLPLocation()
         } else {
             Single.error(
-                PermissionNotGrantedException("Нет разрешения на получение геолокации")
+                PermissionNotGrantedException()
             )
         }
     }
