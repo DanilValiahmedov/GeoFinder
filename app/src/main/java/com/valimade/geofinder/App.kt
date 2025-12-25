@@ -1,8 +1,8 @@
 package com.valimade.geofinder
 
 import android.app.Application
-import com.valimade.geofinder.di.AppComponent
-import com.valimade.geofinder.di.DaggerAppComponent
+import com.valimade.geofinder.di.simply.AppComponent
+import com.valimade.geofinder.di.simply.DaggerAppComponent
 
 class App : Application() {
 
@@ -13,7 +13,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent.builder()
-            .build()
+        appComponent = DaggerAppComponent.factory()
+            .create(this)
     }
 }

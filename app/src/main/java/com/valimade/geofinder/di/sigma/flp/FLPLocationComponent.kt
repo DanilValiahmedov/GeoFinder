@@ -1,4 +1,4 @@
-package com.valimade.geofinder.di.flp
+package com.valimade.geofinder.di.sigma.flp
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.valimade.geofinder.MainActivity

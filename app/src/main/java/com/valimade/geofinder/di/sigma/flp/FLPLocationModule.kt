@@ -1,10 +1,11 @@
-package com.valimade.geofinder.di.flp
+package com.valimade.geofinder.di.sigma.flp
 
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.valimade.geofinder.data.repository.FLPRepository
 import com.valimade.geofinder.data.repository.IFLPRepository
 import com.valimade.geofinder.domain.usecase.GetFLPLocationUseCase
 import com.valimade.geofinder.domain.usecase.IGetFLPLocationUseCase
+import com.valimade.geofinder.domain.usecase.IGetLocationPermissionUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -22,9 +23,10 @@ class FLPLocationModule {
     @FLPLocationScope
     @Provides
     fun provideGetFLPLocationUseCase(
-        flpRepository: IFLPRepository
+        fLPRepository: IFLPRepository,
+        getLocationPermissionUseCase: IGetLocationPermissionUseCase
     ): IGetFLPLocationUseCase {
-        return GetFLPLocationUseCase(flpRepository)
+        return GetFLPLocationUseCase(fLPRepository, getLocationPermissionUseCase)
     }
 
 }

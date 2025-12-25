@@ -1,4 +1,4 @@
-package com.valimade.geofinder.di.locationmanager
+package com.valimade.geofinder.di.sigma.locationmanager
 
 import android.location.LocationManager
 import com.valimade.geofinder.MainActivity

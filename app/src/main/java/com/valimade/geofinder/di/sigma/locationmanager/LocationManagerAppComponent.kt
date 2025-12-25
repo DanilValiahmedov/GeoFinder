@@ -1,4 +1,4 @@
-package com.valimade.geofinder.di.locationmanager
+package com.valimade.geofinder.di.sigma.locationmanager
 
 interface LocationManagerAppComponent {
     fun addLocationManagerComponent(): LocationManagerComponent.Builder
